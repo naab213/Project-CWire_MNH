@@ -137,13 +137,12 @@ GameSpot :
 
 ## Creators
 
-Made with ❤️ and 🐧 in Cergy-Pontoise, France.
+Made with ❤️ and ⚡🔌🏭 in Cergy-Pontoise, France.
 
-<a href="https://github.com/FLG95/Project-Pinguinsss/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=FLG95/Project-Pinguinsss" />
+<a href="https://github.com/naab213/Project-CWire_MNH/graphs/contributors">
+  <img src="https://contrib.rocks/preview?repo=naab213%2FProject-CWire_MNH" />
 </a>
 <br><br>
-Absolutly no penguins were harmed in the making of this game.
 
 <!---
 Credits :
@@ -156,6 +155,6 @@ Credits :
 
 https://github.com/Naereen/badges
 https://github.com/alexandresanlim/Badges4-README.md-Profile/
-https://contrib.rocks/preview?repo=FLG95%2FProject-Pinguinsss
+https://contrib.rocks/preview?repo=naab213%2FProject-CWire_MNH
 https://readme.so/fr/editor
 
