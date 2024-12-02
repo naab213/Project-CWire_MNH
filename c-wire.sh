@@ -45,3 +45,22 @@ if [[ "$consumption" != "company" || "$consumption" != "indiviual" || "$consumpt
 	help
 	exit 4
 fi
+
+exec="codeC/MNH_CWire"
+if [[ ! -f "$exec" ]]; then
+	echo "Error : $exec doesn't exist. Compiling..."
+	make -f Makefile.mak
+
+	if [[ ! -f "$exec" ]]; then
+		echo "Error : $exec hasn't been compiled."
+		exit 5
+	fi
+fi
+
+tmp="tmp"
+if [[ ! -d "$tmp " ]]; then
+	echo "Error : $tmp doesn't exist. Creation of the directory"
+	mkdir tmp
+else
+	rm -rf $tmp
+fi
