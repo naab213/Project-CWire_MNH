@@ -105,7 +105,7 @@ PAVL balanceAVL(PAVL a){
 
 PAVL AVLinsertion(PAVL a, Station elt, int* h){
     if(a == NULL){
-        *h = 1;
+        *h = 0;
         return makeAVL(elt);
     }
     else if(elt.cons < a->elt.cons){
