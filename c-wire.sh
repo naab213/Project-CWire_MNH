@@ -22,6 +22,14 @@ EOF
 }
 
 
+timer() {
+	start=$date( +%s)
+	"$@"
+	end=$date( +%s)
+	time=$($end - $start)
+	echo "The treatment $* took $time second(s)"
+}
+
 if [ $# -ne 3 ]; then
 	echo "Usage : $0 <path> <station> <consumption>"
 	help
@@ -64,3 +72,9 @@ if [[ ! -d "$tmp " ]]; then
 else
 	rm -rf $tmp
 fi
+
+timer(cut -d; -f2,5 c-wire_v25.dat > hvbCtmp.csv) //hvb company
+timer(cut -d; -f3,5 c-wire_v25.dat > hvaCtmp.csv) //hva company
+timer(cut -d; -f4,5 c-wire_v25.dat > lvCtmp.csv) //lv company
+timer(cut -d; -f4,6 c-wire_v25.dat > lvItmp.csv) //lv indiv
+timer(cut -d; -f4,5,6 c-wire_v25.dat > lvAtmp.csv) //lv all
