@@ -2,7 +2,7 @@
 CC = gcc
 
 # Compiler flags
-CFLAGS = -std=c11 -Iinclude
+CFLAGS = -std=c11
 
 # Libraries
 LIBS = 
@@ -13,9 +13,11 @@ SRC = main.c tree.c
 # Object files
 OBJ = $(SRC:.c=.o)
 
-# Executable
-TARGET = MNH_CWire
+# Directory executable
+TARGET_DIR = codeC
 
+# Executable
+TARGET = $(TARGET_DIR)/MNH_CWire
 
 # Linking the executable
 $(TARGET): $(OBJ)
@@ -26,7 +28,7 @@ all: $(TARGET)
 
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c -o $@ $<
+	$(CC) $(CFLAGS) -c $< -o $@
 
 # Clean target
 clean:
