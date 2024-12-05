@@ -23,13 +23,6 @@ Options :
 EOF
 }
 
-timer() {
-	start=$date( +%s)
-	"$@"
-	end=$date( +%s)
-	time=$($end - $start)
-	echo "The treatment $* took $time second(s)"
-}
 
 if [ $# -ne 3 ]; then
 	echo "Usage : $0 <path> <station> <consumption>"
