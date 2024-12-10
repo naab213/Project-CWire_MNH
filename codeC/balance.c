@@ -52,8 +52,8 @@ PAVL rightRotation(PAVL a){
     ba_a = a->balance;
     ba_p = pivot->balance;
 
-    a->balance = ba_a - max(ba_p, 0) +1; //on remplace les - par des +
-    pivot->balance = min(ba_a+2, ba_a + ba_p+2, ba_p+1);
+    a->balance = ba_a - min(ba_p, 0) +1; //on remplace les - par des +
+    pivot->balance = max(ba_a+2, ba_a + ba_p+2, ba_p+1);
 
     a = pivot;
     return a;
