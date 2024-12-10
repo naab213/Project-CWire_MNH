@@ -18,9 +18,7 @@ int min(int a, int b, int c){
         min = b;
     }
     if(c < min){
-        min = c;#include "track.h"
-#include "tree.h"
-#include "balance.h"
+        min = c;
     }
     return min;
 }

@@ -1,22 +1,24 @@
+#ifndef TREE_H
+#define TREE_H
+
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct tree {
+typedef struct {
     int *id_station;
-    int *capacity;
-    int *cons;
+    long *cons;
 } Station;
 
-typedef struct tree {
+typedef struct AVL {
     Station elt;
-    struct tree *fg;
-    struct tree *fd;
+    struct AVL *fg;
+    struct AVL *fd;
     int balance;
 } AVL;
 
 typedef AVL* PAVL;
 
-//Prototypes
-
 PAVL makeAVL(Station elt);
 PAVL AVLinsertion(PAVL a, Station elt, int* h);
+
+#endif // TREE_H

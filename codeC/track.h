@@ -1,7 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
+#ifndef TRACK_H
+#define TRACK_H
 
-//Prototypes
+#include "tree.h"
 
-void traiter(Arbre* a);
-void parcoursInfixe(Arbre* a);
+void traiter(PAVL a);
+void parcoursInfixe(PAVL a);
+
+#endif // TRACK_H

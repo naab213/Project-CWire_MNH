@@ -1,17 +1,18 @@
-#include "tree.h"
-#include "balance.h"
+#include "treatment.h"
 #include "track.h"
 
+
 int main(int argc, char *argv[]){
-    FILE *file;
-    if(agrv != 2){
+    if(argc != 2){
+        printf("Too many/few arguments! There must be 2 !!\n");
         exit(1);
     }
-    char *argv[1] = filename;
-    file = fopen(filename, "r");
-    if(file == NULL){
-        exit(2);
-    }
-    //creer fichier temp avl pour la sortie dans le dossier tmp
+
+    const char *filename = argv[1];
+    PAVL tree = NULL;
+    int h = 0;
+
+    ProcessFile(filename, &tree, &h);
+
     return 0;
 }

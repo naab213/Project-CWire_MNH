@@ -1,7 +1,8 @@
-#include <stdio.h>
-#include <stdlib.h>
+#ifndef BALANCE_H
+#define BALANCE_H
 
-//Prototypes
+#include "tree.h"
+
 
 int max(int a, int b);
 int min(int a, int b, int c);
@@ -10,3 +11,5 @@ PAVL rightRotation(PAVL a);
 PAVL leftDoubleRotation(PAVL a);
 PAVL rightDoubleRotation(PAVL a);
 PAVL balanceAVL(PAVL a);
+
+#endif // BALANCE_H
