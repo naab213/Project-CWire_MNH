@@ -8,6 +8,7 @@
 #define SIZE 256
 
 int search(PAVL a, int id);
+int updateCapacity(PAVL* a, int id, int new_capacity);
 int addConsumption(PAVL *a, int id, long new_cons);
 void ProcessFile(const char *filename, PAVL *tree, int *h);
 

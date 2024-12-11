@@ -1,104 +1,130 @@
 #!/bin/bash
 
 help() {
-	cat << EOF
+    cat << EOF
 Usage : $0 <path> <station> <consumption>
 Description :
 This script.
 
 For its good fonctionment, this script verify the validity of the 3 arguments :
-	1. First argument : valid path to a file
-	2. Second argument : valid type of station
-	3. Third argument : valid type of consumption
+    1. First argument : valid path to a file
+    2. Second argument : valid type of station
+    3. Third argument : valid type of consumption
 
 Required arguments :
-	<path> : valid absolute path to a file
-	<station> : allowed values ("hvb", "hva", "lv")
-	<consumption> : allowed values ("company", "individual", "all")
+    <path> : valid absolute path to a file
+    <station> : allowed values ("hvb", "hva", "lv")
+    <consumption> : allowed values ("company", "individual", "all")
 
-	If the combination of station and consumption is invalid (hvb-individual, hvb-all, hva-individual and hva-all), the script shows "Error : impossible request"
+    If the combination of station and consumption is invalid (hvb-individual, hvb-all, hva-individual and hva-all), the script shows "Error : impossible request"
 
 Options :
-	-h, --help Show this help
+    -h, --help Show this help
 EOF
 }
 
+timer() {
+    start_time=$(date +%s)  # Capturer l'heure de début
+    "$@"  # Exécuter la commande passée en argument
+    end_time=$(date +%s)  # Capturer l'heure de fin
+    elapsed_time=$((end_time - start_time))  # Calculer le temps écoulé
+    echo "Execution time: $elapsed_time seconds"
+}
+
+# Gérer l'option help
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+    help
+    exit 0
+fi
 
 if [ $# -ne 3 ]; then
-	echo "Usage : $0 <path> <station> <consumption>"
-	help
-	exit 1
+    echo "Usage : $0 <path> <station> <consumption>"
+    help
+    exit 1
 fi
+
 path=$1
 station=$2
 consumption=$3
-if [ -f "$path" ]; then
-	echo "Error : $path the path is incorrect"
-	help
-	exit 2
+
+if [ ! -f "$path" ]; then
+    echo "Error : $path is incorrect"
+    help
+    exit 2
 fi
-if [[ "$station" != "hvb" || "$station" != "hva" || "$station" != "lv" ]]; then
-	echo "Error : $station the station's type is incorrect"
-	help
-	exit 3
+
+if [[ "$station" != "hvb" && "$station" != "hva" && "$station" != "lv" ]]; then
+    echo "Error : $station the station's type is incorrect"
+    help
+    exit 3
 fi
-if [[ "$consumption" != "company" || "$consumption" != "indiviual" || "$consumption" != "all" ]];
-	echo "Error : $consumption the consumption's type is incorrect"
-	help
-	exit 4
+
+if [[ "$consumption" != "company" && "$consumption" != "individual" && "$consumption" != "all" ]]; then
+    echo "Error : $consumption the consumption's type is incorrect"
+    help
+    exit 4
 fi
 
 exec="codeC/MNH_CWire"
 if [[ ! -f "$exec" ]]; then
-	echo "Error : $exec doesn't exist. Compiling..."
-	make -f Makefile.mak
+    echo "Error : $exec doesn't exist. Compiling..."
+    make -f Makefile.mak
 
-	if [[ ! -f "$exec" ]]; then
-		echo "Error : $exec hasn't been compiled."
-		exit 5
-	fi
+    if [[ ! -f "$exec" ]]; then
+        echo "Error : $exec hasn't been compiled."
+        exit 5
+    fi
 fi
 
 tmp="tmp"
-if [[ ! -d "$tmp " ]]; then
-	echo "Error : $tmp doesn't exist. Creation of the directory"
-	mkdir tmp
+if [[ ! -d "$tmp" ]]; then
+    echo "Error : $tmp doesn't exist. Creation of the directory"
+    mkdir tmp
 else
-	rm -rf $tmp
+    rm -rf $tmp
 fi
 
 case "$station-$consumption" in
+    "hvb-company")
+        timer awk -F";" '($2 != "-" && $5 != "-") || ($2 != "-" && $7 != "-") {print $2 ";" $7 ";" $8}' c-wire_v25.dat > tmp/hvbCtmp.csv
+        tmp_file="tmp/hvbCtmp.csv"
+        final_file="tests/hvb_comp.csv"
+        ;; #hvb company
 
-	"hvb-company")
-	timer(awk -F";" '$2 != "-" && $5 != "-" {print $2 ";" $8}' c-wire_v25.dat > tmp/hvbCtmp.csv)#timer(awk -F";" '$2 != "-" && $5 != "-" {print $2 ";" $8 ";" $7}' c-wire_v25.dat | sort -t ";" -k3,3n > tmp/hvbCtmp.csv)sort pour trier les lignes, k3,3n pour le troisième argument
-	final_file="tests/hvb_comp.csv"
-	;; #hvb company
+    "hva-company")
+        timer awk -F";" '($3 != "-" && $5 != "-") || ($3 != "-" && $7 != "-") {print $3 ";" $7 ";" $8}' c-wire_v25.dat > tmp/hvaCtmp.csv
+        tmp_file="tmp/hvaCtmp.csv"
+        final_file="tests/hva_comp.csv"
+        ;; #hva company
 
-	"hva-company")
-	timer(awk -F";" '$3 != "-" && $5 != "-" {print $3 ";" $8}' c-wire_v25.dat > tmp/hvaCtmp.csv)#timer(awk -F";" '$3 != "-" && $5 != "-" {print $3 ";" $8 ";" $7}' c-wire_v25.dat | sort -t ";" -k3,3n > tmp/hvaCtmp.csv)
-	final_file="tests/hva_comp.csv"
-	;; #hva company
+    "lv-company")
+        timer awk -F";" '($4 != "-" && $5 != "-") || ($4 != "-" && $7 != "-") {print $4 ";" $7 ";" $8}' c-wire_v25.dat > tmp/lvCtmp.csv
+        tmp_file="tmp/lvCtmp.csv"
+        final_file="tests/lv_comp.csv"
+        ;; #lv company
 
-	"lv-company")
-	timer(awk -F";" '$4 != "-" && $5 != "-" {print $4 ";" $8}' c-wire_v25.dat > tmp/lvCtmp.csv)#timer(awk -F";" '$3 != "-" && $5 != "-" {print $3 ";" $8 ";" $7}' c-wire_v25.dat | sort -t ";" -k3,3n > tmp/hvaCtmp.csv)
-	final_file="tests/lv_comp.csv"
-	;; #lv company
+    "lv-individual")
+        timer awk -F";" '($4 != "-" && $6 != "-") || ($4 != "-" && $7 != "-") {print $4 ";" $7 ";" $8}' c-wire_v25.dat > tmp/lvItmp.csv
+        tmp_file="tmp/lvItmp.csv"
+        final_file="tests/lv_indiv.csv"
+        ;; #lv indiv
 
-	"lv-individual")
-	timer(awk -F";" '$4 != "-" && $6 != "-" {print $4 ";" $8}' c-wire_v25.dat > tmp/lvItmp.csv)#timer(awk -F";" '$4 != "-" && $6 != "-" {print $4 ";" $8 ";" $7}' c-wire_v25.dat | sort -t ";" -k3,3n > tmp/lvItmp.csv)
-	final_file="tests/lv_indiv.csv"
-	;; #lv indiv
+    "lv-all")
+        timer awk -F";" '($4 != "-" && $5 != "-" && $6 != "-") || ($4 != "-" && $7 != "-") {print $3 ";" $7 ";" $8}' c-wire_v25.dat > tmp/lvAtmp.csv
+        tmp_file="tmp/lvAtmp.csv"
+        final_file="tests/lv_all.csv"
+        ;; #lv all
 
-	"lv-all")
-	timer(awk -F";" '$4 != "-" && $5 != "-" && $6 != "-" {print $4 ";" $8}' c-wire_v25.dat > tmp/lvAtmp.csv)#timer(awk -F";" '$4 != "-" && $5 != "-" && $6 != "-" {print $4 ";" $8 ";" $7}' c-wire_v25.dat | sort -t ";" -k3,3n > tmp/lvAtmp.csv)
-	final_file="tests/lv_all.csv"
-	;; #lv all
-
-	*)
-	echo "Error : impossible request"
-	help 
-	exit 6
+    *)
+        echo "Error : impossible request"
+        help 
+        exit 6
 esac
 
-./codeC/MNH_CWire "$final_file"
 
+if [[ ! -f "$final_file" ]]; then
+    echo "Station; Capacity; Consumption" > "$final_file"  # Créer le fichier avec l'entête
+    echo "Created CSV file with headers: $final_file"
+fi
+
+./codeC/MNH_CWire "$tmp_file" "$final_file"

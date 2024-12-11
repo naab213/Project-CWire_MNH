@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "balance.h"
 #include "tree.h"
 
@@ -23,6 +26,26 @@ int min(int a, int b, int c){
     return min;
 }
 
+int min2(int a, int b){
+    if(a <= b){
+        return a;
+    }
+    else{
+        return b;
+    }
+}
+
+int max2(int a, int b, int c){
+    int max = a;
+    
+    if(b > max){
+        max = b;
+    }
+    if(c > max){
+        max = c;
+    }
+    return max;
+}
 
 PAVL leftRotation(PAVL a){
     PAVL pivot;
@@ -52,8 +75,8 @@ PAVL rightRotation(PAVL a){
     ba_a = a->balance;
     ba_p = pivot->balance;
 
-    a->balance = ba_a - min(ba_p, 0) +1; //on remplace les - par des +
-    pivot->balance = max(ba_a+2, ba_a + ba_p+2, ba_p+1);
+    a->balance = ba_a - min2(ba_p, 0) +1; //on remplace les - par des +
+    pivot->balance = max2(ba_a+2, ba_a + ba_p+2, ba_p+1);
 
     a = pivot;
     return a;

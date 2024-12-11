@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "tree.h"
 #include "balance.h"
 
@@ -6,7 +9,7 @@ PAVL makeAVL(Station elt){
     PAVL a;
     a = malloc(sizeof(PAVL));
     a->elt.id_station = NULL;
-    //a->elt.capacity = NULL;
+    a->elt.capacity = NULL;
     a->elt.cons = NULL;
     a->fg = NULL;
     a->fd = NULL;
@@ -23,7 +26,7 @@ Station* createStation(int id, int capacity, int cons){
     }
 
     newStation->id_station = id;
-    newStation->capacity = malloc(sizeof(int));
+    newStation->capacity = capacity;
     newStation->cons = cons;
 
     return newStation;

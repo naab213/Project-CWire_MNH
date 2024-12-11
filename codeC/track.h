@@ -3,7 +3,8 @@
 
 #include "tree.h"
 
-void traiter(PAVL a);
-void parcoursInfixe(PAVL a);
+void traiter(PAVL a, FILE *file);
+void parcoursInfixe(PAVL a, FILE *file);
+void fillCSV(PAVL a, FILE *file);
 
 #endif // TRACK_H

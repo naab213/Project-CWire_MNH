@@ -6,6 +6,7 @@
 
 typedef struct {
     int *id_station;
+    int *capacity;
     long *cons;
 } Station;
 

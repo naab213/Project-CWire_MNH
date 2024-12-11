@@ -8,7 +8,7 @@ CFLAGS = -std=c11
 LIBS = 
 
 # Source files
-SRC = main.c tree.c
+SRC = tree.c balance.c treatment.c track.c main.c
 
 # Object files
 OBJ = $(SRC:.c=.o)
