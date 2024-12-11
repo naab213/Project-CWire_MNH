@@ -23,7 +23,7 @@ Station* createStation(int id, int capacity, int cons){
     }
 
     newStation->id_station = id;
-    //newStation->capacity = malloc(sizeof(int));
+    newStation->capacity = malloc(sizeof(int));
     newStation->cons = cons;
 
     return newStation;
