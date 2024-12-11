@@ -70,41 +70,6 @@ fi
 case "$station-$consumption" in
 
 	"hvb-company")
-	timer(awk -F";" '$2 != "-" && $5 != "-" {print $2 ";" $5 ";" $8}' c-wire_v25.dat > tmp/hvbCtmp.csv)
-	final_file="tests/hvb_comp.csv"
-	;; #hvb company
-
-	"hva-company")
-	timer(awk -F";" '$3 != "-" && $5 != "-" {print $3 ";" $5 ";" $8}' c-wire_v25.dat > tmp/hvaCtmp.csv)
-	final_file="tests/hva_comp.csv"
-	;; #hva company
-
-	"lv-company")
-	timer(awk -F";" '$4 != "-" && $5 != "-" {print $4 ";" $5 ";" $8}' c-wire_v25.dat > tmp/lvCtmp.csv)
-	final_file="tests/lv_comp.csv"
-	;; #lv company
-
-	"lv-individual")
-	timer(awk -F";" '$4 != "-" && $6 != "-" {print $4 ";" $6 ";" $8}' c-wire_v25.dat > tmp/lvItmp.csv)
-	final_file="tests/lv_indiv.csv"
-	;; #lv indiv
-
-	"lv-all")
-	timer(awk -F";" '$4 != "-" && $5 != "-" && $6 != "-" {print $4 ";" $5 ";" $6 ";" $8}' c-wire_v25.dat > tmp/lvAtmp.csv)
-	final_file="tests/lv_all.csv"
-	;; #lv all
-
-	*)
-	echo "Error : impossible request"
-	help 
-	exit 6
-esac
-
-./codeC/MNH_CWire "$final_file"
-
-non mais cest ca le bon code la	!!!
-
-	"hvb-company")
 	timer(awk -F";" '$2 != "-" && $5 != "-" {print $2 ";" $8}' c-wire_v25.dat > tmp/hvbCtmp.csv)
 	final_file="tests/hvb_comp.csv"
 	;; #hvb company
@@ -133,3 +98,7 @@ non mais cest ca le bon code la	!!!
 	echo "Error : impossible request"
 	help 
 	exit 6
+esac
+
+./codeC/MNH_CWire "$final_file"
+
