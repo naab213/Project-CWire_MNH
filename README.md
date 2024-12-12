@@ -13,8 +13,8 @@
 </p>
 
 <p align='center'>
-  A revolutionnary 2-6 players game about penguins, fishes and icerbegs.<br>
-  Try to collect as many fish as you can ! 
+  Découvrez en un clin d’œil l'énergie d'un réseau électrique<br>
+  Analyser des données sur la distribution d’électricité et la production des consommateurs ! 
 </p>
 
 ## Pictures
