@@ -118,6 +118,24 @@ Made with ❤️ and ⚡🔌🏭 in Cergy-Pontoise, France.
 
 Made with [contrib.rocks](https://contrib.rocks).
 
+
+<div>
+  <a href="https://github.com/naab213">
+    <img src="https://avatars.githubusercontent.com/u/naab213" alt="naab213" width="100">
+  </a>
+  <a href="https://github.com/marwadkhissi5">
+    <img src="https://avatars.githubusercontent.com/u/190349291" alt="marwadhissi5" width="100">
+  </a>
+  <a href="https://github.com/_kza.a">
+    <img src="https://avatars.githubusercontent.com/u/_kza.a" alt="_kza.a" width="100">
+  </a>
+</div>
+
+190349291
+https://avatars.githubusercontent.com/u/190349291?v=4&size=64
+
+Made with [contrib.rocks](https://contrib.rocks).
+
 <!---
 Credits :
 
