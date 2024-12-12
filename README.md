@@ -25,6 +25,35 @@
 
 Ce projet permet une gestion et une analyse efficaces des données de distribution d’électricité grâce à l’utilisation de Shell pour le filtrage et du C pour les traitements et calculs. Il fournit une interface simple pour suivre la consommation et la capacité des stations électriques.
 
+## Instructions d'Utilisation
+
+1. Pré-requis :
+
+  - Préparez le fichier CSV contenant les données de distribution d’électricité dans le format attendu.
+ 
+  - Assurez-vous que le dossier de remplacement pour les résultats existe, ou il sera créé automatiquement.
+
+2. Exécution du Script Shell :
+
+    - Ouvrez un terminal et naviguez jusqu’au répertoire contenant le script c-wire.sh.
+
+        Exécuter le programme:
+        ```
+        c-wire.sh
+        ```
+
+3. Interaction avec le Programme :
+
+  - Vous serez invité à choisir les stations (par exemple, hvb, hva, lv) et les types de consommateurs (par exemple, entreprise, particulier).
+    
+  - Le programme traitera les données en fonction de vos choix et fournira les résultats, incluant les consommations et les capacités des stations.
+
+4. Vérification des Résultats :
+
+   - Les résultats du traitement seront enregistrés dans le dossier spécifié. Si le dossier n'existait pas, il sera créé automatiquement par le script.
+
+5. Enjoy ! 🐧
+
 ## Installation and running
 
 > [!CAUTION]
