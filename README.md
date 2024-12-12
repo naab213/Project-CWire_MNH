@@ -59,36 +59,6 @@ Ce projet permet une gestion et une analyse efficaces des données de distributi
 
 
 
-
-
-## Installation and running
-
-> [!CAUTION]
-> The game is only available on Linux at the moment.
-
-> [!WARNING]
-> The `ncurses` library is needed for the game to work.
-
-1. Clone the repository :
-```
-git clone https://github.com/FLG95/Project-Pinguinsss.git
-```
-
-2. Open your terminal where you cloned the repository :
-
-    - (**OPTIONAL** : if you are a teacher that wants to check if our MakeFile is correct) :
-
-        Start the MakeFile :
-        ```
-        make
-        ```
-
-4. Launch the game :
-```
-.\NFS_Penguins
-```
-4. Enjoy ! 🐧
-
 ## System Requirements
 
 To assure the best performance in-game, your system should follow the following **minimal** configuration :
@@ -112,27 +82,21 @@ Made with ❤️ and ⚡🔌🏭 in Cergy-Pontoise, France.
 <br><br>
 
 
-<a href="https://github.com/angular/angular-ja/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=angular/angular-ja" />
-</a>
-
-Made with [contrib.rocks](https://contrib.rocks).
-
-
 <div>
+
   <a href="https://github.com/naab213">
-    <img src="https://avatars.githubusercontent.com/u/naab213" alt="naab213" width="100">
+    <img src="https://avatars.githubusercontent.com/u/166135232" alt="naab213" width="100">
+    
   </a>
   <a href="https://github.com/marwadkhissi5">
     <img src="https://avatars.githubusercontent.com/u/190349291" alt="marwadhissi5" width="100">
-  </a>
+ </a>
   <a href="https://github.com/_kza.a">
-    <img src="https://avatars.githubusercontent.com/u/_kza.a" alt="_kza.a" width="100">
+    <img src="https://avatars.githubusercontent.com/u/167125328" alt="_kza.a" width="100">
   </a>
 </div>
 
-190349291
-https://avatars.githubusercontent.com/u/190349291?v=4&size=64
+
 
 Made with [contrib.rocks](https://contrib.rocks).
 
