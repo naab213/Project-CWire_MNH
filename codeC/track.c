@@ -20,6 +20,5 @@ void parcoursInfixe(PAVL a, FILE *file){
 }
 
 void fillCSV(PAVL a, FILE *file){
-    fprintf(file, "Station; Capacity; Consumption\n");
     parcoursInfixe(a, file);
 }

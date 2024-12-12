@@ -25,7 +25,7 @@ EOF
 
 timer() {
     start_time=$(date +%s)  # Capturer l'heure de début
-    "$@"  # Exécuter la commande passée en argument
+    "$@"  ## Exécuter la commande passée en argument
     end_time=$(date +%s)  # Capturer l'heure de fin
     elapsed_time=$((end_time - start_time))  # Calculer le temps écoulé
     echo "Execution time: $elapsed_time seconds"
@@ -68,7 +68,8 @@ fi
 exec="codeC/MNH_CWire"
 if [[ ! -f "$exec" ]]; then
     echo "Error : $exec doesn't exist. Compiling..."
-    make -f Makefile.mak
+    cd codeC
+    make all ARGS="../input/c-wire_v00.dat $2 $3"
 
     if [[ ! -f "$exec" ]]; then
         echo "Error : $exec hasn't been compiled."
@@ -86,31 +87,31 @@ fi
 
 case "$station-$consumption" in
     "hvb-company")
-        timer awk -F";" '($2 != "-" && $5 != "-") || ($2 != "-" && $7 != "-") {print $2 ";" $7 ";" $8}' c-wire_v25.dat > tmp/hvbCtmp.csv
+        timer awk -F";" '($2 != "-" && $5 != "-") || ($2 != "-" && $7 != "-") {print $2 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/hvbCtmp.csv
         tmp_file="tmp/hvbCtmp.csv"
         final_file="tests/hvb_comp.csv"
         ;; #hvb company
 
     "hva-company")
-        timer awk -F";" '($3 != "-" && $5 != "-") || ($3 != "-" && $7 != "-") {print $3 ";" $7 ";" $8}' c-wire_v25.dat > tmp/hvaCtmp.csv
+        timer awk -F";" '($3 != "-" && $5 != "-") || ($3 != "-" && $7 != "-") {print $3 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/hvaCtmp.csv
         tmp_file="tmp/hvaCtmp.csv"
         final_file="tests/hva_comp.csv"
         ;; #hva company
 
     "lv-company")
-        timer awk -F";" '($4 != "-" && $5 != "-") || ($4 != "-" && $7 != "-") {print $4 ";" $7 ";" $8}' c-wire_v25.dat > tmp/lvCtmp.csv
+        timer awk -F";" '($4 != "-" && $5 != "-") || ($4 != "-" && $7 != "-") {print $4 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/lvCtmp.csv
         tmp_file="tmp/lvCtmp.csv"
         final_file="tests/lv_comp.csv"
         ;; #lv company
 
     "lv-individual")
-        timer awk -F";" '($4 != "-" && $6 != "-") || ($4 != "-" && $7 != "-") {print $4 ";" $7 ";" $8}' c-wire_v25.dat > tmp/lvItmp.csv
+        timer awk -F";" '($4 != "-" && $6 != "-") || ($4 != "-" && $7 != "-") {print $4 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/lvItmp.csv
         tmp_file="tmp/lvItmp.csv"
         final_file="tests/lv_indiv.csv"
         ;; #lv indiv
 
     "lv-all")
-        timer awk -F";" '($4 != "-" && $5 != "-" && $6 != "-") || ($4 != "-" && $7 != "-") {print $3 ";" $7 ";" $8}' c-wire_v25.dat > tmp/lvAtmp.csv
+        timer awk -F";" '($4 != "-" && $5 != "-" && $6 != "-") || ($4 != "-" && $7 != "-") {print $3 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/lvAtmp.csv
         tmp_file="tmp/lvAtmp.csv"
         final_file="tests/lv_all.csv"
         ;; #lv all
@@ -125,6 +126,8 @@ esac
 if [[ ! -f "$final_file" ]]; then
     echo "Station; Capacity; Consumption" > "$final_file"  # Créer le fichier avec l'entête
     echo "Created CSV file with headers: $final_file"
+else 
+    echo "Station; Capacity; Consumption" > "$final_file"
 fi
 
 ./codeC/MNH_CWire "$tmp_file" "$final_file"

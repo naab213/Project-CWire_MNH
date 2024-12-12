@@ -4,34 +4,6 @@
 #include "tree.h"
 #include "balance.h"
 
-
-PAVL makeAVL(Station elt){
-    PAVL a;
-    a = malloc(sizeof(PAVL));
-    a->elt.id_station = NULL;
-    a->elt.capacity = NULL;
-    a->elt.cons = NULL;
-    a->fg = NULL;
-    a->fd = NULL;
-    a->balance = 0;
-
-    return a;
-}
-
-Station* createStation(int id, int capacity, int cons){
-    Station* newStation = malloc(sizeof(Station));
-    if(newStation == NULL){
-        printf("The allocation for the station failed.");
-        exit(1);
-    }
-
-    newStation->id_station = id;
-    newStation->capacity = capacity;
-    newStation->cons = cons;
-
-    return newStation;
-}
-
 PAVL makeAVL(Station* elt){
     if(elt == NULL){
         printf("The doesn't exist.");
@@ -51,10 +23,24 @@ PAVL makeAVL(Station* elt){
     return a;
 }
 
+Station* createStation(int id, int capacity, long cons){
+    Station* newStation = malloc(sizeof(Station));
+    if(newStation == NULL){
+        printf("The allocation for the station failed.");
+        exit(1);
+    }
+
+    newStation->id_station = &id;
+    newStation->capacity = &capacity;
+    newStation->cons = cons;
+
+    return newStation;
+}
+
 PAVL AVLinsertion(PAVL a, Station elt, int* h){
     if(a == NULL){
         *h = 1;
-        return makeAVL(elt);
+        return makeAVL(&elt);
     }
 
     if(elt.cons < a->elt.cons){

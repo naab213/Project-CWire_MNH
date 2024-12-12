@@ -2,22 +2,18 @@
 CC = gcc
 
 # Compiler flags
-CFLAGS = -std=c11
+CFLAGS = -std=c11 -Iinclude -g
 
 # Libraries
-LIBS = 
+LIBS = -lncursesw
 
 # Source files
-SRC = tree.c balance.c treatment.c track.c main.c
-
+SRC = main.c tree.c balance.c treatment.c track.c
 # Object files
 OBJ = $(SRC:.c=.o)
 
-# Directory executable
-TARGET_DIR = codeC
-
 # Executable
-TARGET = $(TARGET_DIR)/MNH_CWire
+TARGET = MNH_CWire
 
 # Linking the executable
 $(TARGET): $(OBJ)
@@ -25,10 +21,10 @@ $(TARGET): $(OBJ)
 
 # Default target
 all: $(TARGET)
-
+	./$(TARGET) $(ARGS)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 # Clean target
 clean:

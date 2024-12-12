@@ -19,7 +19,9 @@ typedef struct AVL {
 
 typedef AVL* PAVL;
 
-PAVL makeAVL(Station elt);
+PAVL makeAVL(Station* elt);
+Station* createStation(int id, int capacity, long cons);
 PAVL AVLinsertion(PAVL a, Station elt, int* h);
+
 
 #endif // TREE_H
