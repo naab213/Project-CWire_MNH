@@ -59,17 +59,6 @@ Ce projet permet une gestion et une analyse efficaces des données de distributi
 
 
 
-## System Requirements
-
-To assure the best performance in-game, your system should follow the following **minimal** configuration :
-| Type | Minimal configuration     |
-| :-------- | :------- |
-| OS | Linux |
-| CPU | Intel Xeon Platinum 8280L |
-| GPU | Nvidia Titan RTX 24GB GDDR6 |
-| RAM | 528 GB |
-| Storage | 2,5 To |
-| Bandwidth | 10GBPs |
 
 
 ## Creators
