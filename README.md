@@ -21,6 +21,10 @@
 ![Game menu](https://i.imgur.com/dFwgshV.png)
 ![In-game picture](https://i.imgur.com/yvEfVcp.png)
 
+## Description
+
+Ce projet permet une gestion et une analyse efficaces des données de distribution d’électricité grâce à l’utilisation de Shell pour le filtrage et du C pour les traitements et calculs. Il fournit une interface simple pour suivre la consommation et la capacité des stations électriques.
+
 ## Installation and running
 
 > [!CAUTION]
