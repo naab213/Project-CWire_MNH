@@ -114,7 +114,29 @@ case "$station-$consumption" in
         timer awk -F";" '($4 != "-" && $5 != "-" && $6 != "-") || ($4 != "-" && $7 != "-") {print $3 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/lvAtmp.csv
         tmp_file="tmp/lvAtmp.csv"
         final_file="tests/lv_all.csv"
-        ;; #lv all
+
+        minmax_file="tests/lv_all_minmax.csv" #on crée un fichier additionnel en plus qui va stocker les 10 min et 10 max, minmax_file est une variable qui contient le chemin complet du nv fichier
+        echo "Nom;Capacite;Consommation;Difference" > "$minmax_file" #en-tête
+
+        awk -F";" 'NR > 1 { #awk divise chaque ligne en champs $1 $2 $3 grace au séparateur -F";" NR > 1 pour éviter la première ligne (en-tête)
+            capacite = $2; 
+            consommation = $3;
+            difference = capacite - consommation;
+            print $0 ";" difference; #On ajoute à la fin de la ligne $0 une nouvelle colonne contenant la différence calculée
+        }' "$final_file" | sort -t';' -k4,4n | { #on trie les données selon la 4ᵉ colonne (la colonne difference) : les lignes sont triées dans l'ordre croissant de la différence
+            head -n 10 >> "$minmax_file" #on ajoute les 10 lv max
+            tail -n 10 >> "$minmax_file" #on ajoute les 10 lv min
+        }
+
+        echo "File $minmax_file has been successfully generated."
+        if [[ -f "$minmax_file" ]]; then #si le fichier a bien été créé
+            echo "Display $minmax_file:" #on veut afficher le contenu du fichier minmax
+            cat "$minmax_file"
+        else
+            echo "Error: $minmax_file was not generated properly."
+            exit 7
+        fi
+        ;;
 
     *)
         echo "Error : impossible request"
