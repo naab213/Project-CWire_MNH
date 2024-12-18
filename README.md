@@ -8,6 +8,7 @@
   <a>
     <img alt="LINUX" src="https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black">
     <img alt="C" src="https://img.shields.io/badge/C-00599C?style=for-the-badge&logo=c&logoColor=white">  
+     <img alt="SHELL" src="https://img.shields.io/badge/Shell-00599C?style=for-the-badge&logo=shell&logoColor=yellow">  
     <img alt="Licence : MIT" src="https://img.shields.io/github/license/Ileriayo/markdown-badges?style=for-the-badge">   
   </a>&nbsp;&nbsp;
 </p>
