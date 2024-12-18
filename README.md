@@ -65,10 +65,7 @@ Ce projet permet une gestion et une analyse efficaces des données de distributi
 
 Made with ❤️ and ⚡🔌🏭 in Cergy-Pontoise, France.
 
-<a href="https://github.com/naab213/Project-CWire_MNH/graphs/contributors">
-  <img src="https://contrib.rocks/preview?repo=naab213%2FProject-CWire_MNH" />
-</a>
-<br><br>
+
 
 
 <div>
