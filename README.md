@@ -13,8 +13,8 @@
 </p>
 
 <p align='center'>
-  Découvrez en un clin d’œil l'énergie d'un réseau électrique<br>
-  Analyser des données sur la distribution d’électricité et la production des consommateurs ! 
+  Discover the power of a grid at a glance<br>
+  Analyze data on electricity distribution and consumer production!  
 </p>
 
 ## Pictures
@@ -23,34 +23,36 @@
 
 ## Description
 
-Ce projet permet une gestion et une analyse efficaces des données de distribution d’électricité grâce à l’utilisation de Shell pour le filtrage et du C pour les traitements et calculs. Il fournit une interface simple pour suivre la consommation et la capacité des stations électriques.
+This project allows for efficient management and analysis of electricity distribution data through the use of Shell for filtering and C for processing and calculations. It provides a simple interface to track power station consumption and capacity.
+Instructions for use
 
-## Instructions d'Utilisation
+## Operating instructions
 
-1. Pré-requis :
+1. Prerequisites :
 
-  - Télécharger au préalable le fichier wire25 et le mettre dans dossier imput.
+  - Download the wire25 file beforehand and put it in imput folder.
  
-  - Assurez-vous que le dossier de remplacement pour les résultats existe, ou il sera créé automatiquement.
+  - Make sure the replacement folder for results exists, or it will be created automatically.
+    
+2. Shell script execution: :
 
-2. Exécution du Script Shell :
+  -  Open a terminal and navigate to the directory containing the c-wire.sh script.
 
-  -  Ouvrez un terminal et naviguez jusqu’au répertoire contenant le script c-wire.sh.
-
-        Exécuter le programme:
+        Run the program:
         ```
         ./codeC/MNH_CWire <choix station> <choix consommateur>
         ```
 
-3. Interaction avec le Programme :
+3. Interaction with the Program:
 
-  - Vous serez invité à choisir les stations (par exemple, hvb, hva, lv) et les types de consommateurs (par exemple, entreprise, particulier).
+  - You will be prompted to select stations (hvb, hva, lv) and types of consumers (business, individual, all).
+
     
-  - Le programme traitera les données en fonction de vos choix et fournira les résultats, incluant les consommations et les capacités des stations.
+  - The program will process data based on your choices and provide results, including station consumption and capacity.
 
-4. Vérification des Résultats :
+4. Verification of Results :
 
-  - Les résultats du traitement seront enregistrés dans le dossier spécifié. Si le dossier n'existait pas, il sera créé automatiquement par le script.
+  - The results of the processing will be saved in the specified folder. If the folder did not exist, it will be created automatically by the script.
 
 5. Enjoy ! 🐧
 
