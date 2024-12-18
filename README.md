@@ -84,7 +84,7 @@ Made with ❤️ and ⚡🔌🏭 in Cergy-Pontoise, France.
 
 
 
-Made with [contrib.rocks](https://contrib.rocks).
+
 
 <!---
 Credits :
