@@ -147,7 +147,7 @@ esac
 sort -t ';' -k 2,2n -k 2.1,2.1n "$tmp_file" > "$sorted_tmp_file" #tri du fichier temporaire
 echo "Sorted file created: $sorted_tmp_file" #sauvegarde dans un fichier trié
 
-#  final_file="tests/${station}_${consumption}.csv" # Création ou réinitialisation du fichier final
+# Création ou réinitialisation du fichier final
 if [[ ! -f "$final_file" ]]; then
     echo "Station; Capacity; Consumption" > "$final_file"  # Créer le fichier avec l'entête
     echo "Created CSV file with headers: $final_file"
