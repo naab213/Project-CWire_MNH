@@ -26,10 +26,13 @@ int search(PAVL a, int id){
 int updateCapacity(PAVL* a, int id, int new_capacity){
     PAVL node = *a;
     if(search(node, id)){ 
-        node->elt.capacity = new_capacity;
-        return 1;
-    }
+        node->elt.capacity = malloc(sizeof(int));
+        if(node->elt.capacity != NULL) {
+            *(node->elt.capacity) = new_capacity;
+            return 1;
+        }
     return 0;
+    }
 }
 
 
