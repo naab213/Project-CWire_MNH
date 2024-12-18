@@ -88,32 +88,32 @@ fi
 case "$station-$consumption" in
     "hvb-company")
         timer awk -F";" '($2 != "-" && $5 != "-") || ($2 != "-" && $7 != "-") {print $2 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/hvbCtmp.csv
-        tmp_file="tmp/hvbCtmp.csv"
-        final_file="tests/hvb_comp.csv"
+        tmp_file="tmp/hvbCtmp.csv"#fichier temp non trié
+        sorted_tmp_file="tests/hvbCtmp_sorted.csv"#fichier trié
         ;; #hvb company
 
     "hva-company")
         timer awk -F";" '($3 != "-" && $5 != "-") || ($3 != "-" && $7 != "-") {print $3 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/hvaCtmp.csv
         tmp_file="tmp/hvaCtmp.csv"
-        final_file="tests/hva_comp.csv"
+        sorted_tmp_file="tests/hvaCtmp_sorted.csv"
         ;; #hva company
 
     "lv-company")
         timer awk -F";" '($4 != "-" && $5 != "-") || ($4 != "-" && $7 != "-") {print $4 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/lvCtmp.csv
         tmp_file="tmp/lvCtmp.csv"
-        final_file="tests/lv_comp.csv"
+        sorted_tmp_file="tests/lvCtmp_sorted.csv"
         ;; #lv company
 
     "lv-individual")
         timer awk -F";" '($4 != "-" && $6 != "-") || ($4 != "-" && $7 != "-") {print $4 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/lvItmp.csv
         tmp_file="tmp/lvItmp.csv"
-        final_file="tests/lv_indiv.csv"
+        sorted_tmp_file="tests/lvItmp_sorted.csv"
         ;; #lv indiv
 
     "lv-all")
         timer awk -F";" '($4 != "-" && $5 != "-" && $6 != "-") || ($4 != "-" && $7 != "-") {print $3 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/lvAtmp.csv
         tmp_file="tmp/lvAtmp.csv"
-        final_file="tests/lv_all.csv"
+        sorted_tmp_file="tests/lvAtmp_sorted.csv"
 
         minmax_file="tests/lv_all_minmax.csv" #on crée un fichier additionnel en plus qui va stocker les 10 min et 10 max, minmax_file est une variable qui contient le chemin complet du nv fichier
         echo "Nom;Capacite;Consommation;Difference" > "$minmax_file" #en-tête
@@ -144,7 +144,10 @@ case "$station-$consumption" in
         exit 6
 esac
 
+sort -t ';' -k 2,2n -k 2.1,2.1n "$tmp_file" > "$sorted_tmp_file" #tri du fichier temporaire
+echo "Sorted file created: $sorted_tmp_file" #sauvegarde dans un fichier trié
 
+#  final_file="tests/${station}_${consumption}.csv" # Création ou réinitialisation du fichier final
 if [[ ! -f "$final_file" ]]; then
     echo "Station; Capacity; Consumption" > "$final_file"  # Créer le fichier avec l'entête
     echo "Created CSV file with headers: $final_file"
@@ -152,4 +155,4 @@ else
     echo "Station; Capacity; Consumption" > "$final_file"
 fi
 
-./codeC/MNH_CWire "$tmp_file" "$final_file"
+./codeC/MNH_CWire "$sorted_tmp_file" "$final_file" #utilisation du fichier trié comme entrée pour le programme C
