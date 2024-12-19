@@ -6,16 +6,28 @@
 
 PAVL makeAVL(Station* elt){
     if(elt == NULL){
-        printf("The doesn't exist.");
+        printf("The station doesn't exist.");
         exit(3);
     }
-    PAVL a = malloc(sizeof(PAVL));
+    PAVL a = malloc(sizeof(AVL));
     if(a == NULL){
-        printf("The allocation for the node failed.");
+        printf("Error: Memory allocation for AVL node failed.\n");
         exit(4);
     }
 
-    a->elt = *elt;
+    a->elt.id_station = malloc(sizeof(long));
+    a->elt.capacity = malloc(sizeof(long));
+    a->elt.cons = malloc(sizeof(long));
+
+    if (a->elt.id_station == NULL || a->elt.capacity == NULL || a->elt.cons == NULL) {
+        printf("Error: Memory allocation for station data failed.\n");
+        exit(5);
+    }
+
+    *(a->elt.id_station) = *(elt->id_station);
+    *(a->elt.capacity) = *(elt->capacity);
+    *(a->elt.cons) = *(elt->cons);
+
     a->fg = NULL;
     a->fd = NULL;
     a->balance = 0;
@@ -23,16 +35,25 @@ PAVL makeAVL(Station* elt){
     return a;
 }
 
-Station* createStation(int id, int capacity, long cons){
+Station* createStation(long id, long capacity, long cons){
     Station* newStation = malloc(sizeof(Station));
     if(newStation == NULL){
-        printf("The allocation for the station failed.");
+        printf("Error: Memory allocation for station failed.\n");
         exit(1);
     }
 
-    newStation->id_station = &id;
-    newStation->capacity = &capacity;
-    newStation->cons = cons;
+        newStation->id_station = malloc(sizeof(long));
+    newStation->capacity = malloc(sizeof(long));
+    newStation->cons = malloc(sizeof(long));
+
+    if (newStation->id_station == NULL || newStation->capacity == NULL || newStation->cons == NULL) {
+        printf("Error: Memory allocation for station fields failed.\n");
+        exit(2);
+    }
+
+    *(newStation->id_station) = id;
+    *(newStation->capacity) = capacity;
+    *(newStation->cons) = cons;
 
     return newStation;
 }
@@ -43,10 +64,10 @@ PAVL AVLinsertion(PAVL a, Station elt, int* h){
         return makeAVL(&elt);
     }
 
-    if(elt.cons < a->elt.cons){
+    if(*(elt.id_station) < *(a->elt.id_station)){
         a->fg = AVLinsertion(a->fg, elt, h);
     } 
-    else if(elt.cons > a->elt.cons){
+    else if(*(elt.id_station) > *(a->elt.id_station)){
         a->fd = AVLinsertion(a->fd, elt, h);
     } 
     else {
@@ -55,7 +76,7 @@ PAVL AVLinsertion(PAVL a, Station elt, int* h){
     }
 
     if (*h != 0) {
-        a->balance += *h;
+        a->balance += (*h);
         a = balanceAVL(a);
 
         if (a->balance == 0) {
@@ -67,5 +88,3 @@ PAVL AVLinsertion(PAVL a, Station elt, int* h){
 
     return a;
 }
-
-
