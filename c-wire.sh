@@ -69,7 +69,9 @@ exec="codeC/MNH_CWire"
 if [[ ! -f "$exec" ]]; then
     echo "Error : $exec doesn't exist. Compiling..."
     cd codeC
-    make all ARGS="../input/c-wire_v00.dat $2 $3"
+    make clean
+    make all
+    cd ..
 
     if [[ ! -f "$exec" ]]; then
         echo "Error : $exec hasn't been compiled."
@@ -82,36 +84,36 @@ if [[ ! -d "$tmp" ]]; then
     echo "Error : $tmp doesn't exist. Creation of the directory"
     mkdir tmp
 else
-    rm -rf $tmp
+    rm -f $tmp
 fi
 
 case "$station-$consumption" in
     "hvb-company")
-        timer "awk -F";" '($2 != "-" && $5 != "-") || ($2 != "-" && $7 != "-") {print $2 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/hvbCtmp.csv"
-        tmp_file="tmp/hvbCtmp.csv"#fichier temp non trié
+        awk -F";" '($2 != "-" && $5 != "-") || ($2 != "-" && $7 != "-") {print $2 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/hvbCtmp.csv
+        tmp_file="tmp/hvbCtmp.csv"
         final_file="tests/hvb_comp.csv"
         ;; #hvb company
 
     "hva-company")
-        timer "awk -F";" '($3 != "-" && $5 != "-") || ($3 != "-" && $7 != "-") {print $3 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/hvaCtmp.csv"
+        awk -F";" '($3 != "-" && $5 != "-") || ($3 != "-" && $7 != "-") {print $3 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/hvaCtmp.csv
         tmp_file="tmp/hvaCtmp.csv"
         final_file="tests/hva_comp.csv"
         ;; #hva company
 
     "lv-company")
-        timer "awk -F";" '($4 != "-" && $5 != "-") || ($4 != "-" && $7 != "-") {print $4 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/lvCtmp.csv"
+        awk -F";" '($4 != "-" && $5 != "-") || ($4 != "-" && $7 != "-") {print $4 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/lvCtmp.csv
         tmp_file="tmp/lvCtmp.csv"
         final_file="tests/lv_comp.csv"
         ;; #lv company
 
     "lv-individual")
-        timer "awk -F";" '($4 != "-" && $6 != "-") || ($4 != "-" && $7 != "-") {print $4 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/lvItmp.csv"
+        awk -F";" '($4 != "-" && $6 != "-") || ($4 != "-" && $7 != "-") {print $4 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/lvItmp.csv
         tmp_file="tmp/lvItmp.csv"
         final_file="tests/lv_indiv.csv"
         ;; #lv indiv
 
     "lv-all")
-        timer "awk -F";" '($4 != "-" && $5 != "-") || ($4 != "-" && $6 != "-") || ($4 != "-" && $7 != "-") {print $3 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/lvAtmp.csv"
+        awk -F";" '($4 != "-" && $5 != "-") || ($4 != "-" && $6 != "-") || ($4 != "-" && $7 != "-") {print $3 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/lvAtmp.csv
         tmp_file="tmp/lvAtmp.csv"
         tmpminmax_file="tmp/lv_all.csv"
 
@@ -124,8 +126,8 @@ case "$station-$consumption" in
             difference = capacite - consommation;
             print $0 ";" difference; #On ajoute à la fin de la ligne $0 une nouvelle colonne contenant la différence calculée
         }' "$tmpminmax_file" | sort -t';' -k4,4n | { #on trie les données selon la 4ᵉ colonne (la colonne difference) : les lignes sont triées dans l'ordre croissant de la différence
-            timer "head -n 10 >> "$final_file"" #on ajoute les 10 lv max
-            timer "tail -n 10 >> "$final_file"" #on ajoute les 10 lv min
+            head -n 10 >> "$final_file" #on ajoute les 10 lv max
+            tail -n 10 >> "$final_file" #on ajoute les 10 lv min
         }
 
         echo "File $final_file has been successfully generated."
@@ -145,12 +147,15 @@ esac
 
 # Création ou réinitialisation du fichier final
 if [[ ! -f "$final_file" ]]; then
+    chmod +w "$final_file"
     echo "Station; Capacity; Consumption" > "$final_file"  # Créer le fichier avec l'entête
     echo "Created CSV file with headers: $final_file"
+
 else 
+    chmod +w "$final_file"
     echo "Station; Capacity; Consumption" > "$final_file"
 fi
 
-./codeC/MNH_CWire "$sorted_tmp_file" "$final_file" #utilisation du fichier trié comme entrée pour le programme C
+./codeC/MNH_CWire "$tmp_file" "$final_file"
 
-timer "sort -t ';' -k 2,2 "$final_file""
+sort -t ';' -k 2,2 "$final_file"
