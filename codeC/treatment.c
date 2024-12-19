@@ -8,20 +8,19 @@
 #include "track.h"
 
 
-int search(PAVL a, long id){
-    if(a == NULL){
-        return 0;
-    } 
-    else if( *(a->elt.id_station) == id){
-        return 1;
-    } 
-    else if(id < *(a->elt.id_station) ){
-        return search(a->fg, id);
-    } 
-    else{
-        return search(a->fd, id);
+PAVL search(PAVL a, long id) {
+    while (a != NULL) {
+        if (*(a->elt.id_station) == id) {
+            return a; // Retourne le nœud correspondant
+        } else if (id < *(a->elt.id_station)) {
+            a = a->fg; // Aller à gauche
+        } else {
+            a = a->fd; // Aller à droite
+        }
     }
+    return NULL; // Retourne NULL si l'ID n'est pas trouvé
 }
+
 
 int updateCapacity(PAVL* a, long id, long new_capacity){
     PAVL node = *a;
@@ -37,13 +36,17 @@ int updateCapacity(PAVL* a, long id, long new_capacity){
 
 
 int addConsumption(PAVL* a, long id, long new_cons) {
-    PAVL node = *a;
-    if(search(node, id)){
-        node->elt.cons += new_cons;
-        return 1;
+    PAVL node = search(*a, id); // Recherche du nœud correspondant
+
+    if (node != NULL) {
+        // Mise à jour de la consommation
+        *(node->elt.cons) += new_cons;
+        return 1; // Succès
     }
-    return 0;
+
+    return 0; // Échec : nœud non trouvé
 }
+
 
 
 void ProcessFile(const char *filename, PAVL *tree, int *h) {
@@ -71,21 +74,16 @@ void ProcessFile(const char *filename, PAVL *tree, int *h) {
 
         int nbtokens = sscanf(buffer, "%ld;%ld;%ld", &id, &capacity, &cons);
         if (nbtokens == 3) {
-            printf("Processing id: %ld, capacity: %ld, consumption: %ld\n", id, capacity, cons);
-            if (!updateCapacity(tree, id, capacity)) {
+            if (!updateCapacity(tree, id, capacity) && !addConsumption(tree, id, cons)) {
                 Station *newStation = createStation(id, capacity, cons);
                 *tree = AVLinsertion(*tree, *newStation, h);
             }
-            if (!addConsumption(tree, id, cons)) {
-                Station *newStation = createStation(id, capacity, cons);
-                *tree = AVLinsertion(*tree, *newStation, h);
-            }
+            
         } else {
-            fprintf(stderr, "Invalid line format in file: %s\n", buffer);
+            printf("Invalid line format in file: %s\n", buffer);
         }
     }
 
     free(buffer);
     fclose(file);
 }
-
