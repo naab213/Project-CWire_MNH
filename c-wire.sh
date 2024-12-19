@@ -53,15 +53,15 @@ if [ ! -f "$path" ]; then # If the path is incorrect
     exit 2
 fi
 
-if [[ "$station" != "hvb" && "$station" != "hva" && "$station" != "lv" ]]; then
+if [[ "$station" != "hvb" && "$station" != "hva" && "$station" != "lv" ]]; then # If the type of station is incorrect
     echo "Error : $station the station's type is incorrect"
-    help
+    help # Return "help" function
     exit 3
 fi
 
-if [[ "$consumption" != "company" && "$consumption" != "individual" && "$consumption" != "all" ]]; then
+if [[ "$consumption" != "company" && "$consumption" != "individual" && "$consumption" != "all" ]]; then # If the type of consumption is incorrect
     echo "Error : $consumption the consumption's type is incorrect"
-    help
+    help # Return "help" function
     exit 4
 fi
 
@@ -88,50 +88,50 @@ else
 fi
 
 case "$station-$consumption" in
-    "hvb-company")
+    "hvb-company") # Data extraction for hvb and company in a temporary file
         awk -F";" '($2 != "-" && $5 != "-") || ($2 != "-" && $7 != "-") {print $2 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/hvbCtmp.csv
         tmp_file="tmp/hvbCtmp.csv"
         final_file="tests/hvb_comp.csv"
         ;; #hvb company
 
-    "hva-company")
+    "hva-company") # Data extraction for hva and company in a temporary file
         awk -F";" '($3 != "-" && $5 != "-") || ($3 != "-" && $7 != "-") {print $3 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/hvaCtmp.csv
         tmp_file="tmp/hvaCtmp.csv"
         final_file="tests/hva_comp.csv"
         ;; #hva company
 
-    "lv-company")
+    "lv-company") # Data extraction for lv and company in a temporary file
         awk -F";" '($4 != "-" && $5 != "-") || ($4 != "-" && $7 != "-") {print $4 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/lvCtmp.csv
         tmp_file="tmp/lvCtmp.csv"
         final_file="tests/lv_comp.csv"
         ;; #lv company
 
-    "lv-individual")
+    "lv-individual") # Data extraction for lv and individual in a temporary file
         awk -F";" '($4 != "-" && $6 != "-") || ($4 != "-" && $7 != "-") {print $4 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/lvItmp.csv
         tmp_file="tmp/lvItmp.csv"
         final_file="tests/lv_indiv.csv"
         ;; #lv indiv
 
-    "lv-all")
+    "lv-all") # Data extraction for lv and all in a temporary file + 10 minimal and 10 maximal values of lv all in a temporary file
         awk -F";" '($4 != "-" && $5 != "-") || ($4 != "-" && $6 != "-") || ($4 != "-" && $7 != "-") {print $3 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/lvAtmp.csv
         tmp_file="tmp/lvAtmp.csv"
         tmpminmax_file="tmp/lv_all.csv"
 
-        final_file="tests/lv_all_minmax.csv" #on crée un fichier additionnel en plus qui va stocker les 10 min et 10 max, minmax_file est une variable qui contient le chemin complet du nv fichier
-        echo "Nom;Capacite;Consommation;Difference" > "$final_file" #en-tête
+        final_file="tests/lv_all_minmax.csv" # We create an additionnal file that will stock the 10 minimal values and the 10 maximum values of the lv_all consumption, minmax_file is a variable that contains the complete path of the new file
+        echo "Nom;Capacite;Consommation;Difference" > "$final_file" # Header
 
-        awk -F";" 'NR > 1 { #awk divise chaque ligne en champs $1 $2 $3 grace au séparateur -F";" NR > 1 pour éviter la première ligne (en-tête)
+        awk -F";" 'NR > 1 { # awk divides every line in fields $1 $2 $3 thanks to the separator -F";" NR > 1 to avoid the first line (header)
             capacite = $2; 
             consommation = $3;
             difference = capacite - consommation;
-            print $0 ";" difference; #On ajoute à la fin de la ligne $0 une nouvelle colonne contenant la différence calculée
-        }' "$tmpminmax_file" | sort -t';' -k4,4n | { #on trie les données selon la 4ᵉ colonne (la colonne difference) : les lignes sont triées dans l'ordre croissant de la différence
-            head -n 10 >> "$final_file" #on ajoute les 10 lv max
-            tail -n 10 >> "$final_file" #on ajoute les 10 lv min
+            print $0 ";" difference; # At the end of the $0 line, we add a new column containing the calculated difference
+        }' "$tmpminmax_file" | sort -t';' -k4,4n | { # We sort the data according to the 4th column (the difference column): the rows are sorted in ascending order of difference
+            head -n 10 >> "$final_file" # We add the 10 maximum lv values
+            tail -n 10 >> "$final_file" # We add the 10 minimum lv values
         }
 
         echo "File $final_file has been successfully generated."
-        if [[ -f "$final_file" ]]; then #si le fichier a bien été créé
+        if [[ -f "$final_file" ]]; then # If the file has been created
             echo "Created directory"
         else
             echo "Error: $final_file was not generated properly."
@@ -145,10 +145,10 @@ case "$station-$consumption" in
         exit 6
 esac
 
-# Création ou réinitialisation du fichier final
+# Creation or reset of the final file
 if [[ ! -f "$final_file" ]]; then
     chmod +w "$final_file"
-    echo "Station; Capacity; Consumption" > "$final_file"  # Créer le fichier avec l'entête
+    echo "Station; Capacity; Consumption" > "$final_file"  # Creation of the file with its header
     echo "Created CSV file with headers: $final_file"
 
 else 
