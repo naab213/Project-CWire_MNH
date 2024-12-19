@@ -7,14 +7,13 @@
 
 
 int main(int argc, char *argv[]){
-   
-    if(argc != 3){
-        printf(" test");
-        printf("Too many/few arguments! There must be 2 !!\n");
+    /*if(argc != 4){
+        printf("Too many/few arguments! There must be 3 !!\n");
         exit(1);
-    }
+    }*/
 
     const char *filename = argv[1];
+    printf("%s", argv[1]);
     const char *final = argv[2];
     PAVL tree = NULL;
     int h = 0;
