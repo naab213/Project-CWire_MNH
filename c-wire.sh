@@ -24,10 +24,10 @@ EOF
 }
 
 timer() {
-    start_time=$(date +%s)  # Capturer l'heure de début
-    "$@"  ## Exécuter la commande passée en argument
-    end_time=$(date +%s)  # Capturer l'heure de fin
-    elapsed_time=$((end_time - start_time))  # Calculer le temps écoulé
+    start_time=$(date +%s)  # Capture the start time
+    "$@"  # Execute the command passed as argument
+    end_time=$(date +%s)  # Capture the end time
+    elapsed_time=$((end_time - start_time))  # Calculate elapsed time
     echo "Execution time: $elapsed_time seconds"
 }
 
@@ -37,19 +37,19 @@ if [[ "$1" == "-h" || "$1" == "--help" ]]; then
     exit 0
 fi
 
-if [ $# -ne 3 ]; then
+if [ $# -ne 3 ]; then # If the number of arguments is incorrect
     echo "Usage : $0 <path> <station> <consumption>"
-    help
+    help # Return "help" function
     exit 1
 fi
 
-path=$1
-station=$2
-consumption=$3
+path=$1 # First argument
+station=$2 # Second argument
+consumption=$3 # Third argument
 
-if [ ! -f "$path" ]; then
+if [ ! -f "$path" ]; then # If the path is incorrect
     echo "Error : $path is incorrect"
-    help
+    help # Return "help" function
     exit 2
 fi
 
