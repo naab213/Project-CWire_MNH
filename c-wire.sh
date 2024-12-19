@@ -111,7 +111,7 @@ case "$station-$consumption" in
         ;; #lv indiv
 
     "lv-all")
-        timer "awk -F";" '($4 != "-" && $5 != "-" && $6 != "-") || ($4 != "-" && $7 != "-") {print $3 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/lvAtmp.csv"
+        timer "awk -F";" '($4 != "-" && $5 != "-") || ($4 != "-" && $6 != "-") || ($4 != "-" && $7 != "-") {print $3 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/lvAtmp.csv"
         tmp_file="tmp/lvAtmp.csv"
         tmpminmax_file="tmp/lv_all.csv"
 
