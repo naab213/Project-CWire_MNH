@@ -24,9 +24,9 @@ EOF
 }
 
 # Timer global
-script_start_time=$(date +%s)  # Capture le temps de départ en secondes
+script_start_time=$(date +%s)  # Capture the start time in seconds
 
-# Gérer l'option help
+# Manage help option
 if [[ "$1" == "-h" || "$1" == "--help" ]]; then
     help
     exit 0
@@ -61,7 +61,7 @@ if [[ "$consumption" != "company" && "$consumption" != "individual" && "$consump
 fi
 
 exec="codeC/MNH_CWire"
-if [[ ! -f "$exec" ]]; then
+if [[ ! -f "$exec" ]]; then # If the executable doesn't exist
     echo "Error : $exec doesn't exist. Compiling..."
     cd codeC
     make clean
@@ -75,7 +75,7 @@ if [[ ! -f "$exec" ]]; then
 fi
 
 tmp="tmp"
-if [[ ! -d "$tmp" ]]; then
+if [[ ! -d "$tmp" ]]; then # Checks or initializes the temporary directory tmp to store intermediate files
     echo "Error : $tmp doesn't exist. Creation of the directory"
     mkdir tmp
 else
@@ -112,23 +112,27 @@ case "$station-$consumption" in
         ;; #lv indiv
 
     "lv-all") # Data extraction for lv and all in a temporary file + 10 minimal and 10 maximal values of lv all in a temporary file
-        awk -F";" '($4 != "-" && $5 != "-") || ($4 != "-" && $6 != "-") || ($4 != "-" && $7 != "-") {print $3 ";" $7 ";" $8}' input/c-wire_v25.dat > tmp/lvAtmp.csv
-        sed -i 's/-/0/g' tmp/lvAtmp.csv
-        tmp_file="tmp/lvAtmp.csv"
-        tmpminmax_file="tmp/lv_all.csv"
+        awk -F";" '($4 != "-" && $5 != "-") || ($4 != "-" && $6 != "-") || ($4 != "-" && $7 != "-") {print $4 ";" $7 ";" $8}' "$path" > "$tmp/lvAtmp.csv"
+        sed -i 's/-/0/g' "$tmp/lvAtmp.csv"
 
-        final_file="tests/lv_all_minmax.csv" # We create an additionnal file that will stock the 10 minimal values and the 10 maximum values of the lv_all consumption, minmax_file is a variable that contains the complete path of the new file
-        echo "Nom;Capacite;Consommation;Difference" > "$final_file" # Header
+        tmp_file="$tmp/lvAtmp.csv"
+        final_file="tests/lv_all_minmax.csv"
 
-        awk -F";" 'NR > 1 { # awk divides every line in fields $1 $2 $3 thanks to the separator -F";" NR > 1 to avoid the first line (header)
-            capacite = $2; 
-            consommation = $3;
-            difference = capacite - consommation;
-            print $0 ";" difference; # At the end of the $0 line, we add a new column containing the calculated difference
-        }' "$tmpminmax_file" | sort -t';' -k4,4n | { # We sort the data according to the 4th column (the difference column): the rows are sorted in ascending order of difference
-            head -n 10 >> "$final_file" # We add the 10 maximum lv values
-            tail -n 10 >> "$final_file" # We add the 10 minimum lv values
-        }
+        if [[ -s "$tmp_file" ]]; then
+            echo "Nom;Capacite;Consommation;Difference" > "$final_file"
+            awk -F";" 'NR > 1 && $2 ~ /^[0-9]+$/ && $3 ~ /^[0-9]+$/ {
+                capacite = $2;
+                consommation = $3;
+                difference = capacite - consommation;
+                print $0 ";" difference;
+            }' "$tmp_file" | sort -t';' -k4,4n | {
+                head -n 10 >> "$final_file"
+                tail -n 10 >> "$final_file"
+            }
+        else
+            echo "Error: No valid data in lv-all"
+            exit 7
+        fi
         ;;
 
     *)
@@ -150,8 +154,8 @@ fi
 sort -t ';' -k 2,2 "$final_file" > /dev/null
 
 # End global timer
-script_end_time=$(date +%s)  # Capture le temps de fin en secondes
-total_elapsed_time=$((script_end_time - script_start_time))  # Temps total en secondes
+script_end_time=$(date +%s)  # Capture the end time in seconds
+total_elapsed_time=$((script_end_time - script_start_time))  # Total time in seconds
 echo "Total script execution time: $total_elapsed_time seconds"
 
 echo "                                                                        ,---.    ,---.,---.   .--..---.  .---.  
