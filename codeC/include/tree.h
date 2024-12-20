@@ -5,8 +5,8 @@
 #include <stdlib.h>
 
 typedef struct {
-    int *id_station;
-    int *capacity;
+    long *id_station;
+    long *capacity;
     long *cons;
 } Station;
 
@@ -20,7 +20,7 @@ typedef struct AVL {
 typedef AVL* PAVL;
 
 PAVL makeAVL(Station* elt);
-Station* createStation(int id, int capacity, long cons);
+Station* createStation(long id, long capacity, long cons);
 PAVL AVLinsertion(PAVL a, Station elt, int* h);
 
 

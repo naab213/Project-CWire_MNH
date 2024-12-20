@@ -28,5 +28,6 @@ void fillCSV(PAVL a, FILE *file){
     printf("Error: File is not open.\n");
     exit(47);
     }
+    fprintf(file, "Station ; Capacity ; Consumption\n");
     parcoursInfixe(a, file);
 }

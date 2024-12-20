@@ -74,7 +74,7 @@ void ProcessFile(const char *filename, PAVL *tree, int *h) {
 
         int nbtokens = sscanf(buffer, "%ld;%ld;%ld", &id, &capacity, &cons);
         if (nbtokens == 3) {
-            if (!updateCapacity(tree, id, capacity) && !addConsumption(tree, id, cons)) {
+            if (!updateCapacity(tree, id, capacity) || !addConsumption(tree, id, cons)) {
                 Station *newStation = createStation(id, capacity, cons);
                 *tree = AVLinsertion(*tree, *newStation, h);
             }

@@ -23,13 +23,8 @@ Options :
 EOF
 }
 
-timer() {
-    start_time=$(date +%s)  # Capture the start time
-    "$@"  # Execute the command passed as argument
-    end_time=$(date +%s)  # Capture the end time
-    elapsed_time=$((end_time - start_time))  # Calculate elapsed time
-    echo "Execution time: $elapsed_time seconds"
-}
+# Timer global
+script_start_time=$(date +%s)  # Capture le temps de départ en secondes
 
 # Gérer l'option help
 if [[ "$1" == "-h" || "$1" == "--help" ]]; then
@@ -84,36 +79,41 @@ if [[ ! -d "$tmp" ]]; then
     echo "Error : $tmp doesn't exist. Creation of the directory"
     mkdir tmp
 else
-    rm -f $tmp
+    rm -rf $tmp/*
 fi
 
 case "$station-$consumption" in
     "hvb-company") # Data extraction for hvb and company in a temporary file
-        awk -F";" '($2 != "-" && $5 != "-") || ($2 != "-" && $7 != "-") {print $2 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/hvbCtmp.csv
+        awk -F";" '($2 != "-" && $5 != "-") || ($2 != "-" && $7 != "-") {print $2 ";" $7 ";" $8}' input/c-wire_v25.dat > tmp/hvbCtmp.csv
+        sed -i 's/-/0/g' tmp/hvbCtmp.csv
         tmp_file="tmp/hvbCtmp.csv"
         final_file="tests/hvb_comp.csv"
         ;; #hvb company
 
     "hva-company") # Data extraction for hva and company in a temporary file
-        awk -F";" '($3 != "-" && $5 != "-") || ($3 != "-" && $7 != "-") {print $3 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/hvaCtmp.csv
+        awk -F";" '($3 != "-" && $5 != "-") || ($3 != "-" && $7 != "-") {print $3 ";" $7 ";" $8}' input/c-wire_v25.dat > tmp/hvaCtmp.csv
+        sed -i 's/-/0/g' tmp/hvaCtmp.csv
         tmp_file="tmp/hvaCtmp.csv"
         final_file="tests/hva_comp.csv"
         ;; #hva company
 
     "lv-company") # Data extraction for lv and company in a temporary file
-        awk -F";" '($4 != "-" && $5 != "-") || ($4 != "-" && $7 != "-") {print $4 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/lvCtmp.csv
+        awk -F";" '($4 != "-" && $5 != "-") || ($4 != "-" && $7 != "-") {print $4 ";" $7 ";" $8}' input/c-wire_v25.dat > tmp/lvCtmp.csv
+        sed -i 's/-/0/g' tmp/lvCtmp.csv
         tmp_file="tmp/lvCtmp.csv"
         final_file="tests/lv_comp.csv"
         ;; #lv company
 
     "lv-individual") # Data extraction for lv and individual in a temporary file
-        awk -F";" '($4 != "-" && $6 != "-") || ($4 != "-" && $7 != "-") {print $4 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/lvItmp.csv
+        awk -F";" '($4 != "-" && $6 != "-") || ($4 != "-" && $7 != "-") {print $4 ";" $7 ";" $8}' input/c-wire_v25.dat > tmp/lvItmp.csv
+        sed -i 's/-/0/g' tmp/lvItmp.csv
         tmp_file="tmp/lvItmp.csv"
         final_file="tests/lv_indiv.csv"
         ;; #lv indiv
 
     "lv-all") # Data extraction for lv and all in a temporary file + 10 minimal and 10 maximal values of lv all in a temporary file
-        awk -F";" '($4 != "-" && $5 != "-") || ($4 != "-" && $6 != "-") || ($4 != "-" && $7 != "-") {print $3 ";" $7 ";" $8}' input/c-wire_v00.dat > tmp/lvAtmp.csv
+        awk -F";" '($4 != "-" && $5 != "-") || ($4 != "-" && $6 != "-") || ($4 != "-" && $7 != "-") {print $3 ";" $7 ";" $8}' input/c-wire_v25.dat > tmp/lvAtmp.csv
+        sed -i 's/-/0/g' tmp/lvAtmp.csv
         tmp_file="tmp/lvAtmp.csv"
         tmpminmax_file="tmp/lv_all.csv"
 
@@ -129,14 +129,6 @@ case "$station-$consumption" in
             head -n 10 >> "$final_file" # We add the 10 maximum lv values
             tail -n 10 >> "$final_file" # We add the 10 minimum lv values
         }
-
-        echo "File $final_file has been successfully generated."
-        if [[ -f "$final_file" ]]; then # If the file has been created
-            echo "Created directory"
-        else
-            echo "Error: $final_file was not generated properly."
-            exit 7
-        fi
         ;;
 
     *)
@@ -148,14 +140,45 @@ esac
 # Creation or reset of the final file
 if [[ ! -f "$final_file" ]]; then
     chmod +w "$final_file"
-    echo "Station; Capacity; Consumption" > "$final_file"  # Creation of the file with its header
-    echo "Created CSV file with headers: $final_file"
+    touch $final_file
 
 else 
     chmod +w "$final_file" # Give the final file a writing authorization
-    echo "Station; Capacity; Consumption" > "$final_file"
 fi
 
-./codeC/MNH_CWire "$tmp_file" "$final_file" # Running the main executable with temporary files as argument
+./codeC/MNH_CWire "$tmp_file" "$final_file" > /dev/null # Running the main executable with temporary files as argument
+sort -t ';' -k 2,2 "$final_file" > /dev/null
 
-sort -t ';' -k 2,2 "$final_file"
+# End global timer
+script_end_time=$(date +%s)  # Capture le temps de fin en secondes
+total_elapsed_time=$((script_end_time - script_start_time))  # Temps total en secondes
+echo "Total script execution time: $total_elapsed_time seconds"
+
+echo "                                                                        ,---.    ,---.,---.   .--..---.  .---.  
+                                                                        |    \  /    ||    \  |  ||   |  |_ _|  
+                                                                        |  ,  \/  ,  ||  ,  \ |  ||   |  ( ' )  
+                                                                        |  |\_   /|  ||  |\_ \|  ||   '-(_{;}_) 
+                                                                        |  _( )_/ |  ||  _( )_\  ||      (_,_)  
+                                                                        | (_ o _) |  || (_ o _)  || _ _--.   |  
+                                                                        |  (_,_)  |  ||  (_,_)\  ||( ' ) |   |  
+                                                                        |  |      |  ||  |    |  |(_{;}_)|   |  
+                                                                        '--'      '--''--'    '--''(_,_) '---'  
+"
+
+echo "             ▗▄▖▗▄▄▄▖    ▗▖  ▗▖▗▄▖ ▗▖ ▗▖▗▄▄▖      ▗▄▄▖▗▄▄▄▖▗▄▄▖ ▗▖  ▗▖▗▄▄▄▖ ▗▄▄▖▗▄▄▄▖    ▗▄▄▄▖ ▗▄▖ ▗▄▄▖      ▗▄▖ ▗▖  ▗▖▗▖  ▗▖    ▗▄▄▄▖▗▄▄▖ ▗▄▄▄▖ ▗▄▖▗▄▄▄▖▗▖  ▗▖▗▄▄▄▖▗▖  ▗▖▗▄▄▄▖
+            ▐▌ ▐▌ █       ▝▚▞▘▐▌ ▐▌▐▌ ▐▌▐▌ ▐▌    ▐▌   ▐▌   ▐▌ ▐▌▐▌  ▐▌  █  ▐▌   ▐▌       ▐▌   ▐▌ ▐▌▐▌ ▐▌    ▐▌ ▐▌▐▛▚▖▐▌ ▝▚▞▘       █  ▐▌ ▐▌▐▌   ▐▌ ▐▌ █  ▐▛▚▞▜▌▐▌   ▐▛▚▖▐▌  █  
+            ▐▛▀▜▌ █        ▐▌ ▐▌ ▐▌▐▌ ▐▌▐▛▀▚▖     ▝▀▚▖▐▛▀▀▘▐▛▀▚▖▐▌  ▐▌  █  ▐▌   ▐▛▀▀▘    ▐▛▀▀▘▐▌ ▐▌▐▛▀▚▖    ▐▛▀▜▌▐▌ ▝▜▌  ▐▌        █  ▐▛▀▚▖▐▛▀▀▘▐▛▀▜▌ █  ▐▌  ▐▌▐▛▀▀▘▐▌ ▝▜▌  █  
+            ▐▌ ▐▌ █        ▐▌ ▝▚▄▞▘▝▚▄▞▘▐▌ ▐▌    ▗▄▄▞▘▐▙▄▄▖▐▌ ▐▌ ▝▚▞▘ ▗▄█▄▖▝▚▄▄▖▐▙▄▄▖    ▐▌   ▝▚▄▞▘▐▌ ▐▌    ▐▌ ▐▌▐▌  ▐▌  ▐▌        █  ▐▌ ▐▌▐▙▄▄▖▐▌ ▐▌ █  ▐▌  ▐▌▐▙▄▄▖▐▌  ▐▌  █  
+"
+
+echo "                                                                                                                       ____ 
+                                                                                                                      |   / 
+                                                                  (    (    (            (                            |  /  
+                                                             (    ))\  ))\   )\ )   (    ))\   (    (    (    (       | /   
+                                                             )\  /((_)/((_) (()/(   )\  /((_)  )\   )\   )\   )\ )    |/    
+                                                            ((_)(_)) (_))    )(_)) ((_)(_))(  ((_) ((_) ((_) _(_/(   (      
+                                                            (_-</ -_)/ -_)  | || |/ _ \| || | (_-</ _ \/ _ \| ' \))  )\     
+                                                            /__/\___|\___|   \_, |\___/ \_,_| /__/\___/\___/|_||_|  ((_)    
+                                                                             |__/                                           
+
+"
