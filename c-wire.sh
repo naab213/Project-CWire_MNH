@@ -152,10 +152,10 @@ if [[ ! -f "$final_file" ]]; then
     echo "Created CSV file with headers: $final_file"
 
 else 
-    chmod +w "$final_file"
+    chmod +w "$final_file" # Give the final file a writing authorization
     echo "Station; Capacity; Consumption" > "$final_file"
 fi
 
-./codeC/MNH_CWire "$tmp_file" "$final_file"
+./codeC/MNH_CWire "$tmp_file" "$final_file" # Running the main executable with temporary files as argument
 
 sort -t ';' -k 2,2 "$final_file"
