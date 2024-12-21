@@ -46,7 +46,7 @@ Instructions for use
 
 3. Interaction with the Program:
 
-  - You will be prompted to select stations (hvb, hva, lv) and types of consumers (individual, individual, all).
+  - You will be prompted to select stations (hvb, hva, lv) and types of consumers (company, individual, all).
 
     
   - The program will process data based on your choices and provide results, including station consumption and capacity.
