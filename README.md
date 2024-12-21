@@ -55,7 +55,7 @@ Instructions for use
 
   - The results of the processing will be saved in the specified folder. If the folder did not exist, it will be created automatically by the script.
 
-5. Enjoy ! 🐧
+5. Enjoy ! ⚡️🔌💡
 
 
 
