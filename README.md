@@ -31,7 +31,7 @@ Instructions for use
 
 1. Prerequisites :
 
-  - Download the wire25 file beforehand and put it in imput folder.
+  - Download the c-wire_v25.dat file beforehand and put it in imput folder.
  
   - Make sure the replacement folder for results exists, or it will be created automatically.
     
