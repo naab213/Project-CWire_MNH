@@ -109,7 +109,7 @@ case "$station-$consumption" in
         sed -i 's/-/0/g' tmp/lvItmp.csv
         tmp_file="tmp/lvItmp.csv"
         final_file="tests/lv_indiv.csv"
-        ;; #lv indiv
+        ;; #lv individual
 
     "lv-all") # Data extraction for lv and all in a temporary file + 10 minimal and 10 maximal values of lv all in a temporary file
         awk -F";" '($4 != "-" && $5 != "-") || ($4 != "-" && $6 != "-") || ($4 != "-" && $7 != "-") {print $4 ";" $7 ";" $8}' "$path" > "$tmp/lvAtmp.csv"
@@ -119,11 +119,11 @@ case "$station-$consumption" in
         final_file="tests/lv_all_minmax.csv"
 
         if [[ -s "$tmp_file" ]]; then
-            echo "Nom;Capacite;Consommation;Difference" > "$final_file"
+            echo "Name;Capacity;Consumption;Difference" > "$final_file"
             awk -F";" 'NR > 1 && $2 ~ /^[0-9]+$/ && $3 ~ /^[0-9]+$/ {
-                capacite = $2;
-                consommation = $3;
-                difference = capacite - consommation;
+                capacity = $2;
+                consumption = $3;
+                difference = capacity - consumption;
                 print $0 ";" difference;
             }' "$tmp_file" | sort -t';' -k4,4n | {
                 head -n 10 >> "$final_file"
