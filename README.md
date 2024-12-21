@@ -41,12 +41,12 @@ Instructions for use
 
         Run the program:
         ```
-        ./codeC/MNH_CWire <choix station> <choix consommateur>
+        ./codeC/MNH_CWire input/c-wire_v25.dat <choix station> <choix consommateur>
         ```
 
 3. Interaction with the Program:
 
-  - You will be prompted to select stations (hvb, hva, lv) and types of consumers (business, individual, all).
+  - You will be prompted to select stations (hvb, hva, lv) and types of consumers (individual, individual, all).
 
     
   - The program will process data based on your choices and provide results, including station consumption and capacity.
